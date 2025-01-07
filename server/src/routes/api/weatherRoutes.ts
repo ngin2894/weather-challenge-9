@@ -1,4 +1,4 @@
-import { Router, type Request, type Response } from 'express';
+import { Router } from 'express';
 const router = Router();
 
 import HistoryService from '../../service/historyService.js';
@@ -14,6 +14,7 @@ router.post('/', async (req, res) => {
     await HistoryService.addCity(cityName);
 
     // TODO: save city to search history
+    return res.status(200).json(weatherData);
   } catch (error) {
     return res.status(500).json({ error: 'Failed to retrieve weather data' });
   }
