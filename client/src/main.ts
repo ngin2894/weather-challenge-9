@@ -35,43 +35,20 @@ API Calls
 */
 
 const fetchWeather = async (cityName: string) => {
-  try {
-    const response = await fetch('/api/weather/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ cityName }),
-    });
-    console.log(response, "this is the response"); 
+  const response = await fetch('/api/weather/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ cityName }),
+  });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+  const weatherData = await response.json();
 
-    const text = await response.text();
-    if (!text) {
-      throw new Error('Empty response from server');
-    }
+  console.log('weatherData: ', weatherData);
 
-    let weatherData;
-    try {
-      weatherData = JSON.parse(text);
-    } catch (e) {
-      throw new Error('Failed to parse JSON response');
-    }
-
-    console.log('weatherData: ', weatherData);
-
-    if (weatherData.current) {
-      renderCurrentWeather(weatherData.current);
-    }
-    if (weatherData.forecast) {
-      renderForecast(weatherData.forecast);
-    }
-  } catch (error) {
-    console.error('Error fetching weather data:', error);
-  }
+  renderCurrentWeather(weatherData[0]);
+  renderForecast(weatherData.slice(1));
 };
 
 const fetchSearchHistory = async () => {
